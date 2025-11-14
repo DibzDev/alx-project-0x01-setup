@@ -1,7 +1,9 @@
-import { UserData, UserModalProps } from "@/interfaces";
+import { UserData, UserModalProps, UserProps } from "@/interfaces";
 import React, { useState } from "react";
 
 const UserModal: React.FC<UserModalProps> = ({ onClose, onSubmit }) => {
+  // The rest of the component remains the same
+  // We'll handle the type conversion inside the component
   const [user, setUser] = useState<UserData>({
     name: "",
     username: "",
@@ -56,11 +58,24 @@ const UserModal: React.FC<UserModalProps> = ({ onClose, onSubmit }) => {
     }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit(user);
-    onClose();
+const handleSubmit = (e: React.FormEvent) => {
+  e.preventDefault();
+  
+  // Convert UserData to UserProps for the onSubmit callback
+  const userPost: UserProps = {
+    id: user.id || 0, // Provide a default ID
+    name: user.name,
+    username: user.username,
+    email: user.email,
+    address: user.address,
+    phone: user.phone,
+    website: user.website,
+    company: user.company
   };
+  
+  onSubmit(userPost);
+  onClose();
+};
 
   return (
     <div className="fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
